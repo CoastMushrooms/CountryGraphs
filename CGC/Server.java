@@ -1,6 +1,3 @@
-// Version 0.4
-// Added methods clearCountryColors (to clear color map) and
-// printCountryColors to print current map (to call for debug purposes)
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -17,7 +14,7 @@ import java.util.stream.Collectors;
 
 public abstract class Server {
     private HttpServer server;
-    private int port; // Port on which the server will listen
+    private int port;
     private Map<String,String> countryColors;
 
     private final List<String> messageQueue = Collections.synchronizedList(new ArrayList<>());
@@ -31,23 +28,20 @@ public abstract class Server {
         this.port = port;
         try {
             server = HttpServer.create(new InetSocketAddress(port), 0);
-            // Define the routes
-            server.createContext("/", new DefaultRoute());         // Serves index.html
-            server.createContext("/static", new StaticFileHandler()); // Serves static files like JS
-            server.createContext("/country-context-menu", new CountryContextMenuHandler()); // POST route for context menu neighbor requests.
-            server.createContext("/country-click-option", new CountryClickOptionHandler()); // POST route for click menu option requests.
-            server.createContext("/country-menu-option", new CountryMenuOptionHandler()); // POST route for menu option requests.
-            server.createContext("/api", new APIHandler()); // POST route that is received when user clicks a country.
+            server.createContext("/", new DefaultRoute());
+            server.createContext("/static", new StaticFileHandler()); 
+            server.createContext("/country-context-menu", new CountryContextMenuHandler());
+            server.createContext("/country-click-option", new CountryClickOptionHandler()); 
+            server.createContext("/country-menu-option", new CountryMenuOptionHandler()); 
+            server.createContext("/api", new APIHandler()); 
             server.createContext("/get-messages", new MessageHandler());
-            server.createContext("/sea-level", new SeaLevelHandler()); // POST route for sea level changes.
+            server.createContext("/sea-level", new SeaLevelHandler()); 
             server.createContext("/capital-options", new CapitalOptionsHandler());
 
         } catch (IOException e) {
             throw new RuntimeException("Failed to start HTTP server on port " + port, e);
         }
         countryColors = new HashMap<String,String>();
-//        countryColors.put("distance","0");
-
     }
 
     public Server() {
@@ -58,9 +52,6 @@ public abstract class Server {
 
     public abstract String getCapitalOptionsJSON();
 
-    /*  This should return a all countries in the shortest path between country1 and country2
-        (as set to the Subclass) with each path having its colors
-    */
     public abstract void getColorPath();
 
     public abstract void handleContextMenu(String country);
@@ -102,14 +93,14 @@ public abstract class Server {
         public void handle(HttpExchange exchange) throws IOException {
 
             if (!"GET".equalsIgnoreCase(exchange.getRequestMethod())) {
-                exchange.sendResponseHeaders(405, -1); // Method Not Allowed
+                exchange.sendResponseHeaders(405, -1); 
                 return;
             }
 
             String jsonResponse;
             synchronized (messageQueue) {
                 jsonResponse = mapToJSON(Collections.singletonMap("messages", String.join(";;", messageQueue)));
-                messageQueue.clear(); // Clear messages after sending
+                messageQueue.clear(); 
             }
 
             exchange.getResponseHeaders().set("Content-Type", "application/json");
@@ -121,8 +112,6 @@ public abstract class Server {
         }
     }
 
-
-    // Main route where the index.html is served
     static class DefaultRoute implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
@@ -135,12 +124,11 @@ public abstract class Server {
         }
     }
 
-    // Handler to serve static files like JS and CSS
 static class StaticFileHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        String path = exchange.getRequestURI().getPath();   // e.g. /static/leaflet.js
-        String filePath = path.substring("/static/".length()); // -> leaflet.js
+        String path = exchange.getRequestURI().getPath(); 
+        String filePath = path.substring("/static/".length()); 
 
         java.nio.file.Path fullPath = java.nio.file.Paths.get(filePath);
 
@@ -185,22 +173,19 @@ static class StaticFileHandler implements HttpHandler {
                         : input.trim();
 
                 System.out.println("Context menu request: " + country);
-                handleContextMenu(country); // Handled in student code
+                handleContextMenu(country); 
 
                 String jSONClickedMap = mapToJSON(countryColors);
                 System.out.println("ClickedMap: " + countryColors);
 
-                //System.out.println("jSONClickedMap -->"+jSONClickedMap);
-                // Respond with the same country received (or modify as needed)
                 byte[] responseBytes = jSONClickedMap.toString().getBytes(StandardCharsets.UTF_8);
                 exchange.sendResponseHeaders(200, responseBytes.length);
 
                 try (OutputStream os = exchange.getResponseBody()) {
                     os.write(responseBytes);
-                } // Auto-closes OutputStream
-
+                } 
             } else {
-                exchange.sendResponseHeaders(405, 0); // Method Not Allowed
+                exchange.sendResponseHeaders(405, 0);
                 exchange.getResponseBody().close();
             }
         }
@@ -225,22 +210,20 @@ static class StaticFileHandler implements HttpHandler {
                 }
 
                 System.out.println("Click option request: " + country + " (" + clickOption + ")");
-                handleClick(country); // Handled in student code
+                handleClick(country); 
 
                 String jSONClickedMap = mapToJSON(countryColors);
                 System.out.println("ClickedMap: " + countryColors);
 
-                //System.out.println("jSONClickedMap -->"+jSONClickedMap);
-                // Respond with the same country received (or modify as needed)
                 byte[] responseBytes = jSONClickedMap.toString().getBytes(StandardCharsets.UTF_8);
                 exchange.sendResponseHeaders(200, responseBytes.length);
 
                 try (OutputStream os = exchange.getResponseBody()) {
                     os.write(responseBytes);
-                } // Auto-closes OutputStream
+                }
 
             } else {
-                exchange.sendResponseHeaders(405, 0); // Method Not Allowed
+                exchange.sendResponseHeaders(405, 0); 
                 exchange.getResponseBody().close();
             }
         }
@@ -257,22 +240,20 @@ static class StaticFileHandler implements HttpHandler {
                 String menuOption = jsonObject.getOrDefault("menuOption", "");
 
                 System.out.println("Menu option request: " + country + " (" + menuOption + ")");
-                handleMenuOption(country, menuOption); // Handled in student code
+                handleMenuOption(country, menuOption);
 
                 String jSONClickedMap = mapToJSON(countryColors);
                 System.out.println("ClickedMap: " + countryColors);
 
-                //System.out.println("jSONClickedMap -->"+jSONClickedMap);
-                // Respond with the same country received (or modify as needed)
                 byte[] responseBytes = jSONClickedMap.toString().getBytes(StandardCharsets.UTF_8);
                 exchange.sendResponseHeaders(200, responseBytes.length);
 
                 try (OutputStream os = exchange.getResponseBody()) {
                     os.write(responseBytes);
-                } // Auto-closes OutputStream
+                } 
 
             } else {
-                exchange.sendResponseHeaders(405, 0); // Method Not Allowed
+                exchange.sendResponseHeaders(405, 0); 
                 exchange.getResponseBody().close();
             }
         }
@@ -291,7 +272,6 @@ static class StaticFileHandler implements HttpHandler {
 
             if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
 
-                // Read the request body
                 String input;
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8))) {
                     input = reader.lines().collect(Collectors.joining("\n"));
@@ -307,25 +287,20 @@ static class StaticFileHandler implements HttpHandler {
                 System.out.println("routeMode: " + routeMode);
                 getInputCountries(country1,country2,routeMode);
 
-                // This is a KEY example on how you can give a hashmap of countries+color to the frontend to display!
-                //Map<String, String> countryColors = getInputCountries(country1,country2);
-                //countryColors.putAll(getInputCountries(country1,country2));
                 System.out.println("Map to Post ==>"+countryColors);
 
-                // Convert HashMap to JSON string
                 String jsonResponse = mapToJSON(countryColors);
 
-                // Set content type and send response
                 exchange.getResponseHeaders().set("Content-Type", "application/json");
                 byte[] responseBytes = jsonResponse.getBytes(StandardCharsets.UTF_8);
                 exchange.sendResponseHeaders(200, responseBytes.length);
 
                 try (OutputStream os = exchange.getResponseBody()) {
                     os.write(responseBytes);
-                } // Auto-closes OutputStream
+                }
 
             } else {
-                exchange.sendResponseHeaders(405, 0); // Method Not Allowed
+                exchange.sendResponseHeaders(405, 0);
                 exchange.getResponseBody().close();
             }
         }
@@ -350,7 +325,6 @@ static class StaticFileHandler implements HttpHandler {
         }
     }
 
-    // Starts the server and opens the default URL in a browser
     public void run() {
         server.setExecutor(null);
         server.start();
@@ -377,7 +351,6 @@ static class StaticFileHandler implements HttpHandler {
         }
     }
 
-    // Convert HashMap to JSON string (made with claude 3.7)
     private String mapToJSON(Map<String, String> map) {
         StringBuilder json = new StringBuilder("{");
         boolean first = true;
@@ -395,16 +368,13 @@ static class StaticFileHandler implements HttpHandler {
         return json.toString();
     }
 
-    // Simple JSON parser without libraries (made with claude 3.7)
     private HashMap<String, String> parseJSON(String jsonStr) {
         HashMap<String, String> result = new HashMap<>();
-        // Remove curly braces and parse key-value pairs
         jsonStr = jsonStr.trim();
         if (jsonStr.startsWith("{") && jsonStr.endsWith("}")) {
             jsonStr = jsonStr.substring(1, jsonStr.length() - 1);
         }
 
-        // Split by commas not inside quotes
         String[] pairs = jsonStr.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 
         for (String pair : pairs) {
@@ -413,7 +383,6 @@ static class StaticFileHandler implements HttpHandler {
                 String key = keyValue[0].trim();
                 String value = keyValue[1].trim();
 
-                // Remove quotes from key and value if present
                 if (key.startsWith("\"") && key.endsWith("\"")) {
                     key = key.substring(1, key.length() - 1);
                 }
@@ -428,20 +397,17 @@ static class StaticFileHandler implements HttpHandler {
     }
 
     public static ArrayList<String> parseCountryList(String input) {
-        // Remove square brackets and quotes
         input = input.trim();
         if (input.startsWith("[") && input.endsWith("]")) {
-            input = input.substring(1, input.length() - 1); // remove [ and ]
+            input = input.substring(1, input.length() - 1);
         }
 
-        // Split by comma, strip extra quotes and whitespace
         String[] items = input.split(",");
         ArrayList<String> result = new ArrayList<>();
 
         for (String item : items) {
-            result.add(item.trim().replaceAll("^\"|\"$", "")); // remove surrounding quotes
+            result.add(item.trim().replaceAll("^\"|\"$", "")); 
         }
-
         return result;
     }
 
@@ -456,7 +422,7 @@ static class StaticFileHandler implements HttpHandler {
                 try {
                     double seaLevel = Double.parseDouble(jsonObject.get("seaLevel"));
                     System.out.println("Sea level change request: " + seaLevel + " meters");
-                    handleSeaLevelChange(seaLevel); // Handled in student code
+                    handleSeaLevelChange(seaLevel); 
 
                     String jSONClickedMap = mapToJSON(countryColors);
                     System.out.println("Sea level map: " + countryColors);
@@ -473,7 +439,7 @@ static class StaticFileHandler implements HttpHandler {
                 }
 
             } else {
-                exchange.sendResponseHeaders(405, 0); // Method Not Allowed
+                exchange.sendResponseHeaders(405, 0);
                 exchange.getResponseBody().close();
             }
         }

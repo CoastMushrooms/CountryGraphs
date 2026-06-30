@@ -17,7 +17,7 @@ public class CountryGraph {
 
     private void loadData() {
         try (BufferedReader br = new BufferedReader(new FileReader(COUNTRY_BORDERS_FILE))) {
-            String line = br.readLine(); // skip header
+            String line = br.readLine();
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length >= 4) {
@@ -36,7 +36,6 @@ public class CountryGraph {
         }
     }
 
-    // Graph methods
     public Set<Country> getCountrySet() {
         return new HashSet<>(countries);
     }
@@ -45,7 +44,7 @@ public class CountryGraph {
         Set<Border> borders = new HashSet<>();
         for (Country country : adjacencyList.keySet()) {
             for (Country neighbor : adjacencyList.get(country)) {
-                if (country.getName().compareTo(neighbor.getName()) < 0) { // to avoid duplicates
+                if (country.getName().compareTo(neighbor.getName()) < 0) { 
                     borders.add(new Border(country, neighbor));
                 }
             }

@@ -21,7 +21,6 @@ public class Country {
         this.maxElevation = 0.0;
     }
 
-    // Accessor methods
     public String getName() {
         return name;
     }
@@ -65,7 +64,6 @@ public class Country {
                 + ", Area: " + area;
     }
 
-    // Mutator methods
     public void setPopulation(long population) {
         this.population = population;
     }

@@ -408,11 +408,9 @@
     L.CountrySelect = L.Control.extend({
 
         initialize: function(options) {
-            L.Util.setOptions(this, options);  // Store options inside instance
+            L.Util.setOptions(this, options); 
         },
         options: {
-            // position: 'topright',
-            // title: 'Country',
             exclude: [],
             include: [],
             countries: L.CountrySelect.countries,
@@ -435,19 +433,16 @@
         },
         getCountries: function() {
 
-            // Remove the excluded countries from the list of countries.
             const { exclude, include, countries } = this.options;
             let filteredCountries = {};
 
             if (include.length > 0) {
-                // Only include specified countries
                 include.forEach(id => {
                     if (countries[id]) {
                         filteredCountries[id] = countries[id];
                     }
                 });
             } else {
-                // Exclude specified countries
                 filteredCountries = { ...countries };
                 exclude.forEach(id => {
                     delete filteredCountries[id];
@@ -464,7 +459,6 @@
 
 
         function init() {
-            // Helper Functions
             function resetAllCountryStyles(includeCoastalRisk) {
                 for (var code in countryLayers) {
                     if (countryLayers.hasOwnProperty(code)) {
@@ -615,7 +609,6 @@
                     if (countryLayers.hasOwnProperty(country)) {
                         console.log("Updating color for country code:", country, "to", hashmap[country]);
                         
-                        // Special handling for submerged countries
                         if (hashmap[country] === "#e53935") {
                             countryLayers[country].setStyle({
                                 color: '#ffcdd2',
@@ -623,14 +616,12 @@
                                 fillOpacity: 0.78
                             });
                         } else if (hashmap[country] === "#ec4899") {
-                            // Coastal flooding risk
                             countryLayers[country].setStyle({
                                 color: '#fbcfe8',
                                 fillColor: '#ec4899',
                                 fillOpacity: 0.68
                             });
                         } else {
-                            // Normal country colors
                             countryLayers[country].setStyle({
                                 color: hashmap[country],
                                 fillColor: hashmap[country],
@@ -647,7 +638,6 @@
             }
 
             function sendCountryContextMenu(countryName) {
-                // Record the context menu click
                 var record = {
                     timestamp: Date.now(),
                     country: countryName,
@@ -665,7 +655,6 @@
             }
 
 			function sendCountryClickOption(countryName) {
-				// Record the click
 				var record = {
 					timestamp: Date.now(),
 					country: countryName,
@@ -707,7 +696,6 @@
                 .catch(error => console.error('Error:', error));
             }
 
-            // Main Code
             const defaultCountryStyle = {
                 color: '#6e8494',
                 weight: 1,
@@ -781,7 +769,6 @@
                 sendFormSubmission(country1Name, country2Name, routeMode);
             });
 
-			// Sea level slider event listener
 			const seaLevelSlider = document.getElementById('sea-level-slider');
 			const seaLevelValue = document.getElementById('sea-level-value');
 			const statisticsDisplay = document.getElementById('statistics-display');
@@ -794,7 +781,6 @@
 				const seaLevel = parseFloat(this.value);
 				seaLevelValue.textContent = seaLevel + ' m';
 				
-				// Send sea level change to server
 				fetch('/sea-level', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
@@ -804,7 +790,6 @@
 				.then(data => {
 					updateSeaLevelCountries(data);
 					updateCountriesFromHashmap(data);
-					// Update statistics display from the "extra" field if available
 					if (data.extra) {
 						statisticsDisplay.textContent = data.extra;
 					}
@@ -852,7 +837,7 @@
 						}
 					})
 					.catch(err => console.error('Failed to fetch messages:', err));
-			}, 250); // Check messages frequently so click alerts feel responsive
+			}, 250); 
 
 			const playButton = document.getElementById('playButton');
 			const playButtonContainer = document.getElementById('playButtonContainer');
@@ -890,7 +875,6 @@
 		<option value="cities">Cities (Capitals)</option>
 	</select>
 	<label id="origin-label" for="country1-name">Origin Country</label>
-	<!-- <input type="text" id="country1-name" name="country1-name" placeholder="Enter country1 name"> -->
 	<select id="country1-name" name="country1-name">
 		<option value="Afghanistan">Afghanistan</option>
 		<option value="Albania">Albania</option>

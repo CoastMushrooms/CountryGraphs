@@ -7,13 +7,6 @@ import java.net.URL;
 public class ElevationAPI {
     private static final String API_URL = "https://api.open-meteo.com/v1/elevation";
     
-    /**
-     * Fetches elevation at specified coordinates
-     * @param latitude The latitude
-     * @param longitude The longitude
-     * @return The elevation in meters, or 0 if not found
-     */
-    
     public static double getElevation(double latitude, double longitude) {
         double[] elevations = getElevations(new double[][] {{ latitude, longitude }});
         return elevations.length == 0 || Double.isNaN(elevations[0]) ? 0 : elevations[0];
@@ -43,7 +36,6 @@ public class ElevationAPI {
                 return new double[0];
             }
             
-            // Read response
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuilder response = new StringBuilder();
             String line;
@@ -52,7 +44,6 @@ public class ElevationAPI {
             }
             br.close();
             
-            // Parse elevation from response manually
             String responseStr = response.toString().replace(" ", "");
             double[] elevations = new double[locations.length];
             int count = 0;

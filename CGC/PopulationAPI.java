@@ -36,10 +36,6 @@ public class PopulationAPI {
         }
     }
 
-    /**
-     * Fetches country data from REST Countries. This is more reliable than the
-     * old population-only API because it also returns country coordinates.
-     */
     public static CountryData getCountryData(String countryName) {
         if (CACHE.containsKey(countryName)) {
             return CACHE.get(countryName);
@@ -91,11 +87,6 @@ public class PopulationAPI {
         return result;
     }
 
-    /**
-     * Fetches the current population of a country.
-     * @param countryName The name of the country
-     * @return The population, or 0 if not found or error
-     */
     public static long getPopulation(String countryName) {
         return getCountryData(countryName).getPopulation();
     }

@@ -15,7 +15,7 @@ You need to sign up for the API Ninjas Population API:
 2. Get your API key from your dashboard
 3. Open `PopulationAPI.java` and replace `YOUR_API_KEY_HERE` with your actual API key:
 ```java
-private static final String API_KEY = "YOUR_API_KEY_HERE"; // Replace with your actual API key
+private static final String API_KEY = "YOUR_API_KEY_HERE";
 ```
 
 ### 2. Open-Elevation API
