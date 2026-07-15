@@ -18,11 +18,11 @@ Countries are represented as nodes, borders as edges. On top of that graph struc
 
 ## Tech Stack
 
-- **Backend:** Java (standard library only — no external dependencies/build tools required)
+- **Backend:** Java (standard library only, no external dependencies/build tools required)
 - **Frontend:** HTML/CSS/JS with [Leaflet.js](https://leafletjs.com/) for the map
 - **Data sources:**
-  - [Open-Elevation API](https://api.open-elevation.com/) — capital elevation (no key required)
-  - [API Ninjas Population API](https://api-ninjas.com/) — country population & capital data (free key required)
+  - [Open-Elevation API](https://api.open-elevation.com/) capital elevation (no key required)
+  - [API Ninjas Population API](https://api-ninjas.com/) country population & capital data (free key required)
 - Country border relationships are stored locally in `CountryBorders.CSV` / `CountryBordersSubmerged.CSV`
 
 ## Getting Started
@@ -72,6 +72,6 @@ Your browser should open automatically at `http://localhost:8000`. On first laun
 
 ## Troubleshooting
 
-- **"No API Key" errors** — make sure your API Ninjas key is set in `PopulationAPI.java`.
-- **Slow first launch** — expected; the app is populating data for every country. Later runs use the cache.
-- **Elevation/population data not loading** — check your internet connection and confirm your API key is valid.
+- **"No API Key" errors** make sure your API Ninjas key is set in `PopulationAPI.java`.
+- **Slow first launch** expected; the app is populating data for every country. Later runs use the cache.
+- **Elevation/population data not loading** check your internet connection and confirm your API key is valid.
