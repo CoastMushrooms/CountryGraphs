@@ -72,6 +72,6 @@ Your browser should open automatically at `http://localhost:8000`. On first laun
 
 ## Troubleshooting
 
-- **"No API Key" errors** make sure your API Ninjas key is set in `PopulationAPI.java`.
-- **Slow first launch** expected; the app is populating data for every country. Later runs use the cache.
-- **Elevation/population data not loading** check your internet connection and confirm your API key is valid.
+- **"No API Key" errors**, make sure your API Ninjas key is set in `PopulationAPI.java`.
+- **Slow first launch** expected, the app is populating data for every country. Later runs use the cache.
+- **Elevation/population data not loading**, check your internet connection and confirm your API key is valid.
