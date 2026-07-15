@@ -2,7 +2,7 @@
 
 An interactive map that models the world's countries as a graph connected by shared borders, and uses that graph to simulate how rising sea levels could submerge countries and displace their populations.
 
-Countries are represented as nodes, borders as edges. On top of that graph structure, the project layers real elevation and population data so you can drag a slider and watch which countries would go underwater at a given sea level — and how many people that would affect.
+Countries are represented as nodes, borders as edges. On top of that graph structure, the project layers real elevation and population data so you can drag a slider and watch which countries would go underwater at a given sea level and how many people that would affect.
 
 ## Features
 
