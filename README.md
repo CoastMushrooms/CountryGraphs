@@ -7,14 +7,14 @@ Countries are represented as nodes, borders as edges. On top of that graph struc
 ## Features
 
 - **Interactive world map** (Leaflet-based) with every country clickable
-- **Border graph** — left-click a country for details, right-click for its list of bordering neighbors
-- **Shortest path finder** — pick two countries and find the shortest border-crossing path between them
+- **Border graph** left-click a country for details, right-click for its list of bordering neighbors
+- **Shortest path finder** pick two countries and find the shortest border-crossing path between them
 - **Sea level slider** (0–500m) that:
   - Colors countries blue as they go "underwater" at a given elevation
   - Shows a live count of submerged countries
   - Totals the displaced population
   - Lists affected countries with their populations
-- **Live data enrichment** — capital elevation and population figures are fetched from external APIs on first run and cached locally for fast subsequent startups
+- **Live data enrichment** capital elevation and population figures are fetched from external APIs on first run and cached locally for fast subsequent startups
 
 ## Tech Stack
 
@@ -53,7 +53,7 @@ javac *.java
 java StudentCode
 ```
 
-Your browser should open automatically at `http://localhost:8000`. On first launch the app fetches elevation and population data for every country, which can take 30–60 seconds — subsequent runs load from a local cache (`country-data-cache.properties`) and start instantly.
+Your browser should open automatically at `http://localhost:8000`. On first launch the app fetches elevation and population data for every country, which can take 30–60 seconds, subsequent runs load from a local cache (`country-data-cache.properties`) and start instantly.
 
 ## Project Structure
 
